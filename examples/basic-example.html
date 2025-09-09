@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPS Widget - Basic Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .example-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        button {
+            background: #4299e1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #3182ce;
+        }
+    </style>
+</head>
+<body>
+    <h1>NPS Widget SDK Examples</h1>
+    
+    <div class="example-section">
+        <h2>1. Universal Widget (Recommended)</h2>
+        <p>Shows all published surveys automatically. This is the easiest way to get started.</p>
+        
+        <div class="code-block">
+<script>
+  (function() {
+    var script = document.createElement('script');
+    script.src = 'https://melodic-melba-d65cd6.netlify.app/nps-universal.js';
+    script.setAttribute('data-position', 'bottom-right');
+    script.setAttribute('data-delay', '5000');
+    document.head.appendChild(script);
+  })();
+</script>
+        </div>
+        
+        <button onclick="loadUniversalWidget()">Load Universal Widget</button>
+        <button onclick="removeAllWidgets()">Remove All Widgets</button>
+    </div>
+
+    <div class="example-section">
+        <h2>2. Specific Survey Widget</h2>
+        <p>Shows a specific survey by ID.</p>
+        
+        <div class="code-block">
+<script>
+  NPSWidget.loadSurvey('your-survey-id', {
+    position: 'bottom-right',
+    delay: 3000
+  });
+</script>
+        </div>
+        
+        <button onclick="loadSpecificWidget()">Load Specific Survey</button>
+    </div>
+
+    <div class="example-section">
+        <h2>3. Inline Embed</h2>
+        <p>Embeds the survey directly in a container on your page.</p>
+        
+        <div id="inline-survey-container" style="border: 2px dashed #ccc; padding: 20px; text-align: center; margin: 20px 0;">
+            <p>Survey will appear here when loaded</p>
+        </div>
+        
+        <div class="code-block">
+<div id="survey-container"></div>
+<script>
+  NPSWidget.loadInline('your-survey-id', 'survey-container');
+</script>
+        </div>
+        
+        <button onclick="loadInlineWidget()">Load Inline Survey</button>
+    </div>
+
+    <div class="example-section">
+        <h2>4. Check Available Surveys</h2>
+        <p>Check what surveys are available before loading widgets.</p>
+        
+        <div class="code-block">
+NPSWidget.checkSurveys(function(error, surveys) {
+  if (error) {
+    console.error('Error:', error);
+    return;
+  }
+  console.log('Available surveys:', surveys);
+});
+        </div>
+        
+        <button onclick="checkSurveys()">Check Available Surveys</button>
+        <div id="survey-list"></div>
+    </div>
+
+    <div class="example-section">
+        <h2>5. Advanced Configuration</h2>
+        <p>Example with all configuration options.</p>
+        
+        <div class="code-block">
+NPSWidget.loadUniversal({
+  position: 'top-right',      // Widget position
+  delay: 10000,               // 10 second delay
+  autoRotate: false,          // Don't rotate surveys
+  showOnce: true,             // Show only once per user
+  baseUrl: 'https://melodic-melba-d65cd6.netlify.app'
+});
+        </div>
+        
+        <button onclick="loadAdvancedWidget()">Load Advanced Widget</button>
+    </div>
+
+    <!-- Load the NPS Widget SDK -->
+    <script>
+        // For demo purposes, we'll simulate the SDK
+        window.NPSWidget = {
+            loadUniversal: function(options) {
+                console.log('Loading universal widget with options:', options);
+                this.showDemoWidget('Universal Widget Loaded!');
+            },
+            
+            loadSurvey: function(surveyId, options) {
+                console.log('Loading survey:', surveyId, 'with options:', options);
+                this.showDemoWidget('Specific Survey Widget Loaded!');
+            },
+            
+            loadInline: function(surveyId, containerId, options) {
+                console.log('Loading inline survey:', surveyId, 'in container:', containerId);
+                var container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '<div style="background: #e6fffa; padding: 20px; border-radius: 8px; text-align: center;"><h3>Demo Survey</h3><p>This would be your actual survey</p><button onclick="this.parentNode.parentNode.innerHTML=\'Survey completed! Thank you.\'">Complete Survey</button></div>';
+                }
+            },
+            
+            checkSurveys: function(callback) {
+                // Simulate API call
+                setTimeout(function() {
+                    callback(null, [
+                        { id: '1', name: 'Customer Satisfaction Survey', responses: 45, score: 72 },
+                        { id: '2', name: 'Product Feedback Survey', responses: 23, score: 68 },
+                        { id: '3', name: 'Website Experience Survey', responses: 67, score: 81 }
+                    ]);
+                }, 500);
+            },
+            
+            removeAll: function() {
+                var widgets = document.querySelectorAll('.demo-widget');
+                widgets.forEach(function(widget) {
+                    widget.remove();
+                });
+                
+                var container = document.getElementById('inline-survey-container');
+                if (container) {
+                    container.innerHTML = '<p>Survey will appear here when loaded</p>';
+                }
+                
+                console.log('All widgets removed');
+            },
+            
+            showDemoWidget: function(message) {
+                // Remove existing demo widgets
+                var existing = document.querySelectorAll('.demo-widget');
+                existing.forEach(function(widget) { widget.remove(); });
+                
+                // Create demo widget
+                var widget = document.createElement('div');
+                widget.className = 'demo-widget';
+                widget.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background: white;
+                    border: 2px solid #4299e1;
+                    border-radius: 12px;
+                    padding: 20px;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                    z-index: 9999;
+                    max-width: 300px;
+                `;
+                widget.innerHTML = `
+                    <div style="text-align: center;">
+                        <h3 style="margin: 0 0 10px 0; color: #2d3748;">${message}</h3>
+                        <p style="margin: 0 0 15px 0; color: #4a5568;">This is a demo widget</p>
+                        <button onclick="this.parentNode.parentNode.remove()" style="background: #4299e1; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">Close</button>
+                    </div>
+                `;
+                document.body.appendChild(widget);
+                
+                // Auto-remove after 5 seconds
+                setTimeout(function() {
+                    if (widget.parentNode) {
+                        widget.remove();
+                    }
+                }, 5000);
+            }
+        };
+
+        // Example functions
+        function loadUniversalWidget() {
+            NPSWidget.loadUniversal({
+                position: 'bottom-right',
+                delay: 1000,
+                autoRotate: true,
+                showOnce: false
+            });
+        }
+
+        function loadSpecificWidget() {
+            NPSWidget.loadSurvey('demo-survey-123', {
+                position: 'bottom-left',
+                delay: 1000
+            });
+        }
+
+        function loadInlineWidget() {
+            NPSWidget.loadInline('demo-survey-123', 'inline-survey-container');
+        }
+
+        function loadAdvancedWidget() {
+            NPSWidget.loadUniversal({
+                position: 'top-right',
+                delay: 1000,
+                autoRotate: false,
+                showOnce: true
+            });
+        }
+
+        function removeAllWidgets() {
+            NPSWidget.removeAll();
+        }
+
+        function checkSurveys() {
+            var listContainer = document.getElementById('survey-list');
+            listContainer.innerHTML = '<p>Loading surveys...</p>';
+            
+            NPSWidget.checkSurveys(function(error, surveys) {
+                if (error) {
+                    listContainer.innerHTML = '<p style="color: red;">Error loading surveys: ' + error.message + '</p>';
+                    return;
+                }
+                
+                var html = '<h4>Available Surveys:</h4><ul>';
+                surveys.forEach(function(survey) {
+                    html += '<li><strong>' + survey.name + '</strong> - ' + survey.responses + ' responses, NPS: ' + survey.score + '</li>';
+                });
+                html += '</ul>';
+                
+                listContainer.innerHTML = html;
+            });
+        }
+    </script>
+</body>
+</html>

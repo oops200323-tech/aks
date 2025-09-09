@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPS Widget SDK - Basic Example</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f9fafb;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        .header p {
+            color: #6b7280;
+        }
+        .demo-section {
+            background: #f3f4f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #4f46e5;
+        }
+        .code-block {
+            background: #1f2937;
+            color: #e5e7eb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+        .button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        .button:hover {
+            transform: translateY(-1px);
+        }
+        .button.secondary {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        .status {
+            background: #ecfdf5;
+            border: 1px solid #d1fae5;
+            color: #065f46;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .warning {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            color: #92400e;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>NPS Widget SDK Demo</h1>
+            <p>Interactive demonstration of the NPS Widget SDK v2.0.0</p>
+        </div>
+
+        <div class="demo-section">
+            <h2>🚀 Quick Start</h2>
+            <p>This page demonstrates the basic usage of the NPS Widget SDK. The widget will appear automatically after 5 seconds.</p>
+            
+            <div class="code-block">
+&lt;!-- Load the SDK --&gt;
+&lt;script src="https://melodic-melba-d65cd6.netlify.app/sdk/nps-widget-sdk.js"&gt;&lt;/script&gt;
+
+&lt;!-- Initialize with your API key --&gt;
+&lt;script&gt;
+  new NPSWidget({
+    apiKey: 'nps_demo_key_12345',
+    position: 'bottom-right',
+    primaryColor: '#4F46E5',
+    delay: 5000,
+    onResponse: function(data) {
+      console.log('NPS Response:', data);
+    }
+  });
+&lt;/script&gt;
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🎮 Interactive Controls</h2>
+            <p>Try different widget positions and behaviors:</p>
+            
+            <div style="margin: 20px 0;">
+                <button class="button" onclick="showWidget('bottom-right')">Bottom Right</button>
+                <button class="button" onclick="showWidget('bottom-left')">Bottom Left</button>
+                <button class="button" onclick="showWidget('top-right')">Top Right</button>
+                <button class="button" onclick="showWidget('top-left')">Top Left</button>
+                <button class="button" onclick="showWidget('center')">Center Modal</button>
+                <button class="button" onclick="showWidget('slide-up')">Slide Up</button>
+                <button class="button" onclick="showWidget('slide-down')">Slide Down</button>
+            </div>
+            
+            <div style="margin: 20px 0;">
+                <button class="button secondary" onclick="hideWidget()">Hide Widget</button>
+                <button class="button secondary" onclick="closeWidget()">Close Widget</button>
+                <button class="button secondary" onclick="getStatus()">Get Status</button>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>📊 Widget Status</h2>
+            <div id="status-display" class="status">
+                Widget not initialized yet...
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h2>🎨 Customization Example</h2>
+            <p>Advanced configuration with custom colors and callbacks:</p>
+            
+            <div class="code-block">
+new NPSWidget({
+  apiKey: 'nps_your_api_key_here',
+  
+  // Positioning & Styling
+  position: 'bottom-right',
+  primaryColor: '#FF6B6B',
+  roundedCorners: true,
+  closeButton: true,
+  progressBar: true,
+  
+  // Timing
+  delay: 3000,
+  autoFadeOut: true,
+  fadeOutDelay: 5000,
+  
+  // Behavior
+  showOnce: false,
+  autoRotate: true,
+  
+  // URL Targeting
+  urlTargeting: {
+    enabled: true,
+    mode: 'include',
+    patterns: [
+      { type: 'contains', value: '/product' },
+      { type: 'starts_with', value: '/pricing' }
+    ]
+  },
+  
+  // SPA Support
+  spaMode: true,
+  
+  // Event Callbacks
+  onResponse: function(data) {
+    console.log('Score:', data.score);
+    // Send to analytics
+    gtag('event', 'nps_response', {
+      value: data.score
+    });
+  },
+  
+  onShow: function(survey) {
+    console.log('Widget shown:', survey.name);
+  },
+  
+  onClose: function() {
+    console.log('Widget closed');
+  },
+  
+  onError: function(message, error) {
+    console.error('Error:', message, error);
+  }
+});
+            </div>
+            
+            <button class="button" onclick="showCustomWidget()">Try Custom Widget</button>
+        </div>
+
+        <div class="demo-section">
+            <h2>🔧 Features</h2>
+            <ul>
+                <li>✅ <strong>API Key Authentication</strong> - Secure access to your surveys</li>
+                <li>✅ <strong>CORS & CSP Compliant</strong> - Works with strict security policies</li>
+                <li>✅ <strong>7 Widget Positions</strong> - Corners, center, slide animations</li>
+                <li>✅ <strong>URL Targeting</strong> - Show on specific pages or patterns</li>
+                <li>✅ <strong>SPA Support</strong> - React, Vue, Angular compatible</li>
+                <li>✅ <strong>Response Callbacks</strong> - Integrate with analytics</li>
+                <li>✅ <strong>Mobile Responsive</strong> - Works on all devices</li>
+                <li>✅ <strong>Auto JSONP Fallback</strong> - Handles strict CSP</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <strong>Note:</strong> This is a demo using a test API key. In production, you'll need to get your actual API key from the NPS dashboard.
+        </div>
+    </div>
+
+    <!-- Load the NPS Widget SDK -->
+    <script src="https://melodic-melba-d65cd6.netlify.app/sdk/nps-widget-sdk.js"></script>
+    
+    <script>
+        let currentWidget = null;
+        
+        // Initialize default widget
+        document.addEventListener('DOMContentLoaded', function() {
+            currentWidget = new NPSWidget({
+                apiKey: 'nps_demo_key_12345',
+                position: 'bottom-right',
+                primaryColor: '#4F46E5',
+                delay: 5000,
+                showOnce: false,
+                onResponse: function(data) {
+                    console.log('NPS Response:', data);
+                    updateStatus('Response received! Score: ' + data.score);
+                    
+                    // Simulate analytics tracking
+                    if (window.gtag) {
+                        gtag('event', 'nps_response', {
+                            event_category: 'NPS',
+                            value: data.score
+                        });
+                    }
+                },
+                onShow: function(survey) {
+                    console.log('Widget shown:', survey);
+                    updateStatus('Widget is now visible');
+                },
+                onClose: function() {
+                    console.log('Widget closed');
+                    updateStatus('Widget was closed');
+                },
+                onError: function(message, error) {
+                    console.error('Widget error:', message, error);
+                    updateStatus('Error: ' + message, 'error');
+                }
+            });
+            
+            updateStatus('Widget initialized and will show after 5 seconds');
+        });
+        
+        function showWidget(position) {
+            if (currentWidget) {
+                currentWidget.destroy();
+            }
+            
+            currentWidget = new NPSWidget({
+                apiKey: 'nps_demo_key_12345',
+                position: position,
+                primaryColor: '#4F46E5',
+                delay: 500,
+                showOnce: false,
+                onResponse: function(data) {
+                    updateStatus('Response received! Score: ' + data.score);
+                },
+                onShow: function(survey) {
+                    updateStatus('Widget shown in position: ' + position);
+                },
+                onClose: function() {
+                    updateStatus('Widget closed');
+                }
+            });
+        }
+        
+        function showCustomWidget() {
+            if (currentWidget) {
+                currentWidget.destroy();
+            }
+            
+            currentWidget = new NPSWidget({
+                apiKey: 'nps_demo_key_12345',
+                position: 'center',
+                primaryColor: '#FF6B6B',
+                delay: 500,
+                showOnce: false,
+                roundedCorners: true,
+                closeButton: true,
+                progressBar: true,
+                autoFadeOut: false,
+                onResponse: function(data) {
+                    updateStatus('Custom widget response! Score: ' + data.score);
+                },
+                onShow: function(survey) {
+                    updateStatus('Custom widget shown with red theme');
+                }
+            });
+        }
+        
+        function hideWidget() {
+            if (currentWidget) {
+                currentWidget.hide();
+                updateStatus('Widget hidden');
+            }
+        }
+        
+        function closeWidget() {
+            if (currentWidget) {
+                currentWidget.close();
+                updateStatus('Widget closed and removed');
+            }
+        }
+        
+        function getStatus() {
+            if (currentWidget) {
+                const status = currentWidget.getStatus();
+                updateStatus(`Status - Visible: ${status.isVisible}, Loading: ${status.isLoading}, Surveys: ${status.surveysCount}`);
+            } else {
+                updateStatus('No widget instance available');
+            }
+        }
+        
+        function updateStatus(message, type = 'success') {
+            const statusEl = document.getElementById('status-display');
+            statusEl.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            statusEl.className = type === 'error' ? 'warning' : 'status';
+        }
+        
+        // Simulate Google Analytics for demo
+        window.gtag = function() {
+            console.log('GA Event:', arguments);
+        };
+    </script>
+</body>
+</html>
