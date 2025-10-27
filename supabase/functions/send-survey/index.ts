@@ -15,12 +15,12 @@ Deno.serve(async (req) => {
 
   try {
     const { surveyId, recipientEmail, surveyName } = await req.json();
-    
+
     // Get the origin from the request headers
     const origin = req.headers.get('origin') || 'https://stackblitz.com';
     const surveyUrl = `${origin}/s/${surveyId}`;
 
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: 'NPS Survey <onboarding@resend.dev>',
       to: recipientEmail,
       subject: `Please share your feedback - ${surveyName}`,

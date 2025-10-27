@@ -11,12 +11,16 @@ import DemoWebsite from './components/DemoWebsite';
 import Toast from './components/Toast';
 import Auth from './components/Auth';
 
+interface SurveySettings {
+  [key: string]: unknown;
+}
+
 interface Survey {
   id: string;
   name: string;
   created_at: string;
   status: 'draft' | 'published';
-  settings?: any;
+  settings?: SurveySettings;
   responses?: number;
   score?: number;
 }
@@ -120,7 +124,7 @@ function App() {
     setActiveSection('editor');
   };
 
-  const handleSaveDraft = async (settings: any) => {
+  const handleSaveDraft = async (settings: SurveySettings) => {
     if (!currentSurvey) return;
 
     const { data, error } = await supabase
@@ -145,7 +149,7 @@ function App() {
     setActiveSection('dashboard');
   };
 
-  const handlePublish = async (settings: any) => {
+  const handlePublish = async (settings: SurveySettings) => {
     if (!currentSurvey) return;
 
     const { data, error } = await supabase
