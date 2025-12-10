@@ -35,9 +35,27 @@ const Dashboard: React.FC<DashboardProps> = ({
   const [apiKey, setApiKey] = useState<string>('');
   const [loadingApiKey, setLoadingApiKey] = useState(true);
 
-  React.useEffect(() => {
-    loadApiKey();
+  const loadApiKeyAsync = React.useCallback(async () => {
+    try {
+      const { data: user } = await supabase.auth.getUser();
+      if (!user.user) throw new Error('User not authenticated');
+
+      const { data, error } = await supabase.rpc('get_or_create_api_key', {
+        p_user_id: user.user.id
+      });
+
+      if (error) throw error;
+      setApiKey(data);
+    } catch (error) {
+      console.error('Error loading API key:', error);
+    } finally {
+      setLoadingApiKey(false);
+    }
   }, []);
+
+  React.useEffect(() => {
+    loadApiKeyAsync();
+  }, [loadApiKeyAsync]);
 
   const handleCreateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,31 +92,9 @@ const Dashboard: React.FC<DashboardProps> = ({
     setShowDeleteConfirm(null);
   };
 
-  const loadApiKey = async () => {
-    try {
-      const { data: user } = await supabase.auth.getUser();
-      if (!user.user) throw new Error('User not authenticated');
-
-      const { data, error } = await supabase.rpc('get_or_create_api_key', {
-        p_user_id: user.user.id
-      });
-
-      if (error) throw error;
-
-      setApiKey(data);
-      return data;
-    } catch (error) {
-      console.error('Error loading API key:', error);
-      return 'Error loading API key';
-    } finally {
-      setLoadingApiKey(false);
-    }
-  };
-
   const handleCopyApiKey = async () => {
-    const key = await loadApiKey();
-    if (key && !key.includes('Error')) {
-      navigator.clipboard.writeText(key);
+    if (apiKey) {
+      navigator.clipboard.writeText(apiKey);
       setApiKeyCopied(true);
       setTimeout(() => setApiKeyCopied(false), 2000);
     }
