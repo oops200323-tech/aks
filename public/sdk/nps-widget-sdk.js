@@ -100,19 +100,21 @@
     }
 
     async makeRequest(endpoint, options = {}) {
-      // Use Netlify functions with proper endpoint mapping
-      let netlifyEndpoint;
+      // Use Supabase edge functions directly
+      const supabaseUrl = 'https://melodic-melba-d65cd6.supabase.co';
+
+      let functionName;
       if (endpoint.includes('published-surveys')) {
-        netlifyEndpoint = '/.netlify/functions/published-surveys';
+        functionName = 'published-surveys';
       } else if (endpoint.includes('submit-response')) {
-        netlifyEndpoint = '/.netlify/functions/submit-response';
+        functionName = 'submit-response';
       } else if (endpoint.includes('validate-api-key')) {
-        netlifyEndpoint = '/.netlify/functions/validate-api-key';
+        functionName = 'validate-api-key';
       } else {
-        netlifyEndpoint = endpoint;
+        functionName = endpoint.split('/').pop();
       }
-      
-      const url = `${DEFAULT_BASE_URL}${netlifyEndpoint}`;
+
+      const url = `${supabaseUrl}/functions/v1/${functionName}`;
       
       try {
         // Try standard fetch first
