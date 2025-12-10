@@ -33,7 +33,11 @@ const Dashboard: React.FC<DashboardProps> = ({
   const [showApiKey, setShowApiKey] = useState(false);
   const [apiKeyCopied, setApiKeyCopied] = useState(false);
   const [apiKey, setApiKey] = useState<string>('');
-  const [loadingApiKey, setLoadingApiKey] = useState(false);
+  const [loadingApiKey, setLoadingApiKey] = useState(true);
+
+  React.useEffect(() => {
+    loadApiKey();
+  }, []);
 
   const handleCreateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,19 +75,16 @@ const Dashboard: React.FC<DashboardProps> = ({
   };
 
   const loadApiKey = async () => {
-    if (apiKey) return apiKey; // Return cached key if available
-    
-    setLoadingApiKey(true);
     try {
       const { data: user } = await supabase.auth.getUser();
       if (!user.user) throw new Error('User not authenticated');
-      
+
       const { data, error } = await supabase.rpc('get_or_create_api_key', {
         p_user_id: user.user.id
       });
-      
+
       if (error) throw error;
-      
+
       setApiKey(data);
       return data;
     } catch (error) {
@@ -103,10 +104,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     }
   };
 
-  const handleShowApiKey = async () => {
-    if (!showApiKey && !apiKey) {
-      await loadApiKey();
-    }
+  const handleShowApiKey = () => {
     setShowApiKey(!showApiKey);
   };
 
@@ -138,29 +136,21 @@ const Dashboard: React.FC<DashboardProps> = ({
           <div className="flex gap-3">
             <button
               onClick={handleShowApiKey}
-              disabled={loadingApiKey}
               className="btn-secondary"
             >
-              {loadingApiKey ? (
-                <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <Eye size={18} />
-              )}
-              {loadingApiKey ? 'Loading...' : showApiKey ? 'Hide' : 'Show'} API Key
+              <Eye size={18} />
+              {showApiKey ? 'Hide' : 'Show'} API Key
             </button>
             <button
               onClick={handleCopyApiKey}
-              disabled={loadingApiKey}
               className="btn-primary"
             >
-              {loadingApiKey ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              ) : apiKeyCopied ? (
+              {apiKeyCopied ? (
                 <Check size={18} />
               ) : (
                 <Copy size={18} />
               )}
-              {loadingApiKey ? 'Loading...' : apiKeyCopied ? 'Copied!' : 'Copy API Key'}
+              {apiKeyCopied ? 'Copied!' : 'Copy API Key'}
             </button>
           </div>
         </div>
