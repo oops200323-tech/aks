@@ -37,15 +37,17 @@ const Dashboard: React.FC<DashboardProps> = ({
 
   const loadApiKeyAsync = React.useCallback(async () => {
     try {
-      const { data: user } = await supabase.auth.getUser();
-      if (!user.user) throw new Error('User not authenticated');
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
 
       const { data, error } = await supabase.rpc('get_or_create_api_key', {
-        p_user_id: user.user.id
+        p_user_id: user.id
       });
 
       if (error) throw error;
-      setApiKey(data);
+      if (data) {
+        setApiKey(data);
+      }
     } catch (error) {
       console.error('Error loading API key:', error);
     } finally {
