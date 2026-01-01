@@ -7,7 +7,7 @@
 
   // SDK Configuration
   const SDK_VERSION = '2.0.0';
-  const DEFAULT_BASE_URL = 'https://melodic-melba-d65cd6.netlify.app';
+  const DEFAULT_BASE_URL = window.location.origin;
   
   // Default configuration
   const DEFAULT_CONFIG = {

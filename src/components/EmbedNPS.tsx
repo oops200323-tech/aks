@@ -27,12 +27,11 @@ const EmbedNPS: React.FC<EmbedNPSProps> = ({ surveys }) => {
   };
 
   const getUniversalEmbedCode = () => {
-    const baseUrl = 'https://melodic-melba-d65cd6.netlify.app';
     return `<!-- Universal NPS Widget - Shows ALL Published Surveys -->
 <script>
   (function() {
     var npsScript = document.createElement('script');
-    npsScript.src = "${baseUrl}/nps-universal.js";
+    npsScript.src = window.location.origin + "/nps-universal.js";
     npsScript.setAttribute('data-position', "bottom-right");
     npsScript.setAttribute('data-delay', "5000");
     npsScript.setAttribute('data-auto-rotate', "true");
@@ -43,12 +42,11 @@ const EmbedNPS: React.FC<EmbedNPSProps> = ({ surveys }) => {
   };
 
   const getSpecificEmbedCode = (survey: Survey) => {
-    const baseUrl = 'https://melodic-melba-d65cd6.netlify.app';
     return `<!-- Specific Survey Widget -->
 <script>
   (function() {
     var npsScript = document.createElement('script');
-    npsScript.src = "${baseUrl}/nps-widget.js";
+    npsScript.src = window.location.origin + "/nps-widget.js";
     npsScript.setAttribute('data-survey-id', "${survey.id}");
     npsScript.setAttribute('data-position', "bottom-right");
     npsScript.setAttribute('data-delay', "3000");
@@ -218,7 +216,7 @@ const EmbedNPS: React.FC<EmbedNPSProps> = ({ surveys }) => {
                     <code>{`<script>
   (function() {
     var npsScript = document.createElement('script');
-    npsScript.src = "https://melodic-melba-d65cd6.netlify.app/nps-universal.js";
+    npsScript.src = window.location.origin + "/nps-universal.js";
     npsScript.setAttribute('data-position', "top-right");
     npsScript.setAttribute('data-delay', "10000");        // 10 seconds
     npsScript.setAttribute('data-auto-rotate', "false");  // Don't rotate

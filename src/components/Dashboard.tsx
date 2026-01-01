@@ -166,7 +166,7 @@ const Dashboard: React.FC<DashboardProps> = ({
               <label className="block text-sm font-medium text-gray-700 mb-2">Integration Example:</label>
               <div className="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
                 <pre>{`<!-- NPS Widget SDK -->
-<script src="https://melodic-melba-d65cd6.netlify.app/sdk/nps-widget-sdk.js"></script>
+<script src="${window.location.origin}/sdk/nps-widget-sdk.js"></script>
 <script>
   new NPSWidget({
     apiKey: '${apiKey || 'your_api_key_here'}',
