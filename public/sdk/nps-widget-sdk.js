@@ -101,7 +101,7 @@
 
     async makeRequest(endpoint, options = {}) {
       // Use Supabase edge functions directly
-      const supabaseUrl = 'https://melodic-melba-d65cd6.supabase.co';
+      const supabaseUrl = 'https://xlqiusveaxpobcuarsim.supabase.co';
 
       let functionName;
       if (endpoint.includes('published-surveys')) {
