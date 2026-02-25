@@ -84,12 +84,12 @@ Deno.serve(async (req) => {
       .eq('id', surveyId)
       .eq('user_id', userId)
       .eq('status', 'published')
-      .single();
+      .maybeSingle();
 
     if (surveyError || !survey) {
       return new Response(
         JSON.stringify({ error: 'Survey not found or not accessible' }),
-        { 
+        {
           status: 404,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         }
