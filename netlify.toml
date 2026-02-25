@@ -1,18 +1,20 @@
 [build]
-  publish = "dist"
-  command = "npm install --include=dev && npm run build"
+publish = "dist"
+command = "npx vite build"
 
 [functions]
-  directory = "netlify/functions"
+directory = "netlify/functions"
 
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+from = "/api/*"
+to = "/.netlify/functions/:splat"
+status = 200
 
-# Environment variables for functions
+[context]
+[context.production]
 [context.production.environment]
-  NODE_ENV = "production"
+NODE_ENV = "production"
 
+[context.deploy-preview]
 [context.deploy-preview.environment]
-  NODE_ENV = "development"
+NODE_ENV = "development"
